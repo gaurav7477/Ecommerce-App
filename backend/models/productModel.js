@@ -67,15 +67,11 @@ const productSchema = mongoose.Schema({
         },
     ],
 
-    user: {
-        type: mongoose.Schema.ObjectId,
-        ref: "User",
-        required: true,
-    },
+
     createdAt: {
         type: Date,
         default: Date.now,
     },
 });
 
-export default productSchema;
+export const Product = mongoose.model("Product", productSchema);
