@@ -2,6 +2,9 @@ import ErrorHandler from "../utils/ErrorHandler.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncError.js";
 import User from "../models/userModel.js";
 import sendToken from "../utils/jwtToken.js";
+import sendEmail from "../utils/sendEmail.js";
+import crypto from "crypto";
+
 
 // Register a user => /api/v1/register
 
@@ -57,5 +60,128 @@ export const logoutUser = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: "Logged out",
+    });
+});
+
+// forgot password
+export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+    }
+
+    // get reset password token
+    const resetToken = user.getResetPasswordToken();
+
+    await user.save({ validateBeforeSave: false });
+    const resetPasswordUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`;
+
+    const message = `Your password reset token is \n\n${resetPasswordUrl}\n\nIf you have not requested this email, then ignore it.`;
+
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: "ShopIT Password Recovery",
+            message,
+        });
+
+        res.status(200).json({
+            success: true,
+            message: `Email sent to: ${user.email}  successfully`,
+        });
+    } catch (error) {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save({ validateBeforeSave: false });
+        return next(new ErrorHandler(error.message, 500));
+    }
+
+});
+
+// reset password
+export const resetPassword = catchAsyncErrors(async (req, res, next) => {
+    // creating token hash
+    const resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(req.params.token)
+        .digest("hex");
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        return next(new ErrorHandler("Reset Password Token is invalid or has been expired",
+            400));
+    }
+    // console.log(req.body.password, req.body.confirmPassword);
+    if (req.body.password !== req.body.confirmPassword) {
+        return next(new ErrorHandler("Password does not match", 400));
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    sendToken(user, 200, res);
+});
+
+//get user profile Details => /api/v1/me
+export const getUserProfile = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+    console.log(user);
+    res.status(200).json({
+        success: true,
+        user,
+    })
+});
+
+// update user password => /api/v1/password/update
+
+export const updatePassword = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select("+password");
+    // check previous user password
+    const isMatched = await user.comparePassword(req.body.oldPassword);
+
+    if (!isMatched) {
+        return next(new ErrorHandler("old password is incorrect", 400));
+    }
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+        return next(new ErrorHandler("password does not match", 400));
+    }
+
+    user.password = req.body.newPassword;
+
+    await user.save();
+
+    sendToken(user, 200, res);
+});
+
+// update user profile
+
+export const updateProfile = catchAsyncErrors(async (req, res, next) => {
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email,
+    };
+
+    // update avatar: todo
+    // update cloudinary later
+
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+    });
+
+    res.status(200).json({
+        success: true,
+        user,
     });
 });
