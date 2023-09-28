@@ -1,4 +1,3 @@
-import e from "express";
 import ErrorHandler from "../utils/ErrorHandler.js";
 
 const errorMiddleWare = (err, req, res, next) => {
