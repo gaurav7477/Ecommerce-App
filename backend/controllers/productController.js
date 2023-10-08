@@ -88,8 +88,8 @@ export const createProductReview = catchAsyncErrors(async (req, res, next) => {
         rating: Number(rating),
         comment,
     }
-    console.log(productId);
-    console.log(review);
+    // console.log(productId);
+    // console.log(review);
 
     const product = await Product.findById(productId);
 
