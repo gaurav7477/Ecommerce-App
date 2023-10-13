@@ -6,6 +6,7 @@ import MetaData from "../Layout/MetaData";
 import { getProducts } from "../../actions/productAction";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../Layout/Loader/Loader.js";
+// import { ShoppingCart } from "@material-ui/icons";
 
 
 const Home = () => {
@@ -28,7 +29,6 @@ const Home = () => {
                 <div className="banner">
                     <p>Welcome to Ecommerce</p>
                     <h1>FIND AMAZING PRODUCTS BELOW</h1>
-
                     <a href="#container">
                         <button>
                             Scroll <CgMouse />

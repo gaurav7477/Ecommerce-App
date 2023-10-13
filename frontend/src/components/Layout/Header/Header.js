@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ReactNavbar } from "overlay-navbar";
+import logo from "../../../Images/logo.png"
+import {
+    Search,
+    ShoppingCart,
+    AccountCircle,
+} from "@material-ui/icons";
 
 const options = {
     burgerColorHover: "#eb4034",
     logoWidth: "20vmax",
+    logo,
     navColor1: "white",
     logoHoverSize: "10px",
     logoHoverColor: "#eb4034",
@@ -27,6 +34,12 @@ const options = {
     profileIconColor: "rgba(35, 35, 35,0.8)",
     searchIconColor: "rgba(35, 35, 35,0.8)",
     cartIconColor: "rgba(35, 35, 35,0.8)",
+    searchIcon: true,
+    SearchIconElement: Search,
+    cartIcon: true,
+    CartIconElement: ShoppingCart,
+    profileIcon: true,
+    ProfileIconElement: AccountCircle,
     profileIconColorHover: "#eb4034",
     searchIconColorHover: "#eb4034",
     cartIconColorHover: "#eb4034",
@@ -34,6 +47,18 @@ const options = {
 };
 
 const Header = () => {
+    useEffect(() => {
+
+        const search = document.querySelector("#searchIcon");
+        const cart = document.querySelector("#cartIcon");
+        const profile = document.querySelector("#profileIcon");
+
+        search.style.color = options.searchIconColor;
+
+        cart.style.color = options.cartIconColor;
+        profile.style.color = options.profileIconColor;
+    }
+        , [])
     return <ReactNavbar {...options} />;
 };
 
