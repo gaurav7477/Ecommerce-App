@@ -3,7 +3,7 @@ import "./Home.css";
 import { CgMouse } from "react-icons/cg";
 import ProductCard from "./ProductCard.js";
 import MetaData from "../Layout/MetaData";
-import { getProducts } from "../../actions/productAction";
+import { getProduct } from "../../actions/productAction";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../Layout/Loader/Loader.js";
 // import { ShoppingCart } from "@material-ui/icons";
@@ -16,7 +16,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        dispatch(getProducts());
+        dispatch(getProduct());
     }, [dispatch]);
 
     return (
