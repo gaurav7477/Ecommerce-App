@@ -11,7 +11,7 @@ import {
 
 
 // Get all products
-export const getProduct = (keyword = "", currentPage = 1, price = [0, 25000], category = undefined, ratings = 0) =>
+export const getProduct = (keyword = "", currentPage = 1, price = [0, 25000], category, ratings = 0) =>
     async (dispatch) => {
         try {
             dispatch({ type: ALL_PRODUCT_REQUEST });
@@ -21,7 +21,7 @@ export const getProduct = (keyword = "", currentPage = 1, price = [0, 25000], ca
             if (category) {
                 link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}`;
             }
-            console.log(link)
+            // console.log(link)
             const { data } = await axios.get(link);
 
             dispatch({
@@ -31,7 +31,7 @@ export const getProduct = (keyword = "", currentPage = 1, price = [0, 25000], ca
         } catch (error) {
             dispatch({
                 type: ALL_PRODUCT_FAIL,
-                payload: error.response.data.message,
+                payload: error.response.data.message
             });
         }
     };

@@ -1,52 +1,49 @@
 class ApiFeatures {
-    constructor(query, queryString) {
+    constructor(query, queryStr) {
         this.query = query;
-        this.queryString = queryString;
+        this.queryStr = queryStr;
     }
 
     search() {
-        const keyword = this.queryString.keyword ? {
-            name: {
-                $regex: this.queryString.keyword,
-                $options: 'i' // case insensitive
-            },
-        } : {};
-
-        // console.log(keyword);
+        const keyword = this.queryStr.keyword
+            ? {
+                name: {
+                    $regex: this.queryStr.keyword,
+                    $options: "i",
+                },
+            }
+            : {};
 
         this.query = this.query.find({ ...keyword });
         return this;
     }
 
-
     filter() {
-        const queryCopy = { ...this.queryString };
-        // console.log(queryCopy);
+        const queryCopy = { ...this.queryStr };
+        //   Removing some fields for category
+        const removeFields = ["keyword", "page", "limit"];
 
-        // Removing fields from the query
-        const removeFields = ['keyword', 'limit', 'page'];
+        removeFields.forEach((key) => delete queryCopy[key]);
 
-        removeFields.forEach(el => delete queryCopy[el]);
-        // console.log(queryCopy);
+        // Filter For Price and Rating
 
-        //filter for price and ratings
-        console.log(queryCopy);
         let queryStr = JSON.stringify(queryCopy);
-        queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
-        console.log(queryStr);
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
 
-        this.query = this.query.find(queryCopy);
+        this.query = this.query.find(JSON.parse(queryStr));
+
         return this;
-
     }
 
-    pagination(resultsPerPage) {
-        const currentPage = Number(this.queryString.page) || 1;
+    pagination(resPerPage) {
+        const currentPage = Number(this.queryStr.page) || 1;
 
-        const skip = resultsPerPage * (currentPage - 1);
-        this.query = this.query.limit(resultsPerPage).skip(skip);   // limit is the number of results per page
+        const skip = resPerPage * (currentPage - 1);
+
+        this.query = this.query.limit(resPerPage).skip(skip);
 
         return this;
     }
 }
+
 export default ApiFeatures;

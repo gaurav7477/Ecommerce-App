@@ -1,3 +1,11 @@
-#cartIcon #searchIcon {
-  color: rgba(35, 35, 35,0.8);
+.speedDial {
+  position: fixed;
+  right: 3vmax;
+  top: 3vmax;
+}
+
+.speedDialIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 100%;
 }

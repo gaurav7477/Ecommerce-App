@@ -4,11 +4,16 @@ import User from "../models/userModel.js";
 import sendToken from "../utils/jwtToken.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
-
+import cloudinary from "cloudinary";
 
 // Register a user => /api/v1/register
-
 export const registerUser = catchAsyncErrors(async (req, res, next) => {
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "avatars",
+        width: 150,
+        crop: "scale",
+    });
+
     const { name, email, password } = req.body;
 
     const user = await User.create({
@@ -16,8 +21,8 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
         email,
         password,
         avatar: {
-            public_id: "this is a simple id",
-            url: "profile pic url",
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
         },
     });
 
@@ -25,9 +30,7 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 
-
 // Login User => /api/v1/login
-
 export const loginUser = catchAsyncErrors(async (req, res, next) => {
     const { email, password } = req.body;
 
@@ -76,7 +79,11 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const resetToken = user.getResetPasswordToken();
 
     await user.save({ validateBeforeSave: false });
-    const resetPasswordUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`;
+
+    // backend url -> we ron on 3000 that's why we use FRONTEND_URL
+    // const resetPasswordUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`;
+    const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+
 
     const message = `Your password reset token is \n\n${resetPasswordUrl}\n\nIf you have not requested this email, then ignore it.`;
 
@@ -164,15 +171,31 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 
-// update user profile
+// update User Profile
 export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     const newUserData = {
         name: req.body.name,
         email: req.body.email,
     };
 
-    // update avatar
-    // update cloudinary later
+    if (req.body.avatar !== "" && req.body.avatar != "undefined") {
+        // console.log("huehue")
+        const user = await User.findById(req.user.id);
+        const imageId = user.avatar.public_id;
+
+        await cloudinary.v2.uploader.destroy(imageId);
+
+        const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: "avatars",
+            width: 150,
+            crop: "scale",
+        });
+
+        newUserData.avatar = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+        };
+    }
 
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
         new: true,
@@ -182,10 +205,9 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        user,
+        user
     });
 });
-
 
 // get All users(ADMIN) => /api/v1/admin/users
 

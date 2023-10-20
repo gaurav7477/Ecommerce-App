@@ -1,7 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-
+import fileUpload from "express-fileupload";
 // route imports
 import product from "./routes/productRoute.js";
 import user from "./routes/userRoute.js";
@@ -14,6 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 
 // Route Imports

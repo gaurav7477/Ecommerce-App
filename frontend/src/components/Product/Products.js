@@ -37,7 +37,7 @@ const Products = ({ match }) => {
         error,
         productCount,
         resPerPage,
-        filteredProductsCount,
+        filteredProductCount,
     } = useSelector((state) => state.products);
 
     const keyword = match.params.keyword;
@@ -49,7 +49,7 @@ const Products = ({ match }) => {
     const priceHandler = (event, newPrice) => {
         setPrice(newPrice);
     };
-    let count = filteredProductsCount;
+    let count = filteredProductCount;
 
     useEffect(() => {
         if (error) {
@@ -113,28 +113,26 @@ const Products = ({ match }) => {
                             />
                         </fieldset>
                     </div>
-                    {resPerPage < count && (
-                        <div className="paginationBox">
-                            <Pagination
-                                activePage={currentPage}
-                                itemsCountPerPage={resPerPage}
-                                totalItemsCount={productCount}
-                                onChange={setCurrentPageNo}
-                                nextPageText="Next"
-                                prevPageText="Prev"
-                                firstPageText="1st"
-                                lastPageText="Last"
-                                itemClass="page-item"
-                                linkClass="page-link"
-                                activeClass="pageItemActive"
-                                activeLinkClass="pageLinkActive"
-                            />
-                        </div>
-                    )}
+                    <div className="paginationBox">
+                        <Pagination
+                            activePage={currentPage}
+                            itemsCountPerPage={resPerPage}
+                            totalItemsCount={productCount}
+                            onChange={setCurrentPageNo}
+                            nextPageText="Next"
+                            prevPageText="Prev"
+                            firstPageText="1st"
+                            lastPageText="Last"
+                            itemClass="page-item"
+                            linkClass="page-link"
+                            activeClass="pageItemActive"
+                            activeLinkClass="pageLinkActive"
+                        />
+                    </div>
                 </Fragment>
             )}
         </Fragment>
-    );
+    )
 };
 
 export default Products;

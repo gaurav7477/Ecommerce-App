@@ -12,6 +12,8 @@ export const isAuthenicatedUser = catchAsyncErrors(async (req, res, next) => {
 
 
     req.user = await User.findById(decodedData.id);
+
+    // console.log(req.user);
     next();
 });
 
