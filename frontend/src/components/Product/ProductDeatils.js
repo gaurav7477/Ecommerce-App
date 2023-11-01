@@ -5,12 +5,16 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     getProductDetails
 } from "../../actions/productAction";
+import { useAlert } from "react-alert";
 import ReviewCard from "./ReviewCard.js";
 import Loader from "../Layout/Loader/Loader";
 import { Rating } from "@material-ui/lab";
 import MetaData from "../Layout/MetaData";
+import { addItemsToCart } from "../../actions/cartAction.js";
+
 
 const ProductDeatils = ({ match }) => {
+    const alert = useAlert();
     const dispatch = useDispatch();
     const { product, loading } = useSelector(state => state.productDetails);
 
@@ -32,18 +36,20 @@ const ProductDeatils = ({ match }) => {
 
     const increaseQuantity = () => {
         if (product.Stock <= quantity) return;
-
         const qty = quantity + 1;
         setQuantity(qty);
     };
 
     const decreaseQuantity = () => {
         if (1 >= quantity) return;
-
         const qty = quantity - 1;
         setQuantity(qty);
     };
 
+    const addToCartHandler = () => {
+        dispatch(addItemsToCart(match.params.id, quantity));
+        alert.success("Item Added to Cart");
+    };
 
     const submitReviewToggle = () => {
         open ? setOpen(false) : setOpen(true);
@@ -91,7 +97,9 @@ const ProductDeatils = ({ match }) => {
                                         <input readOnly type="number" value={quantity} />
                                         <button onClick={increaseQuantity}>+</button>
                                     </div>
-                                    <button>
+                                    <button
+                                        onClick={addToCartHandler}
+                                    >
                                         Add to Cart
                                     </button>
                                 </div>
