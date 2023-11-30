@@ -6,13 +6,13 @@ import { Link } from "react-router-dom";
 import "./Profile.css";
 
 const Profile = ({ history }) => {
-  const { user, loading, isAuthenticated } = useSelector((state) => state.user);
+  const { user, loading, isAuthenicatedUser } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (isAuthenticated === false) {
+    if (isAuthenicatedUser === false) {
       history.push("/login");
     }
-  }, [history, isAuthenticated]);
+  }, [history, isAuthenicatedUser]);
   return (
     <Fragment>
       {loading ? (

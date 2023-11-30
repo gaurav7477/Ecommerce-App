@@ -20,6 +20,7 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { createOrder, clearErrors } from "../../actions/orderAction";
 
 const Payment = ({ history }) => {
+  
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
 
   const dispatch = useDispatch();
@@ -95,6 +96,9 @@ const Payment = ({ history }) => {
             id: result.paymentIntent.id,
             status: result.paymentIntent.status,
           };
+          
+          dispatch(createOrder(order));
+
           history.push("/success");
         } 
         else {
@@ -105,18 +109,16 @@ const Payment = ({ history }) => {
     catch (error) {
       payBtn.current.disabled = false;
 
-      alert.error(JSON.stringify(error));
+      alert.error(error? error.response.data.message: JSON.stringify(error));
     }
   };
-
 
   useEffect(() => {
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }
-  ,[dispatch,alert])
+  }, [dispatch, error, alert]);
 
   return (
     <Fragment>

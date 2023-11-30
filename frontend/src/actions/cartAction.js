@@ -1,5 +1,7 @@
 import {
-    ADD_TO_CART, REMOVE_CART_ITEM, SAVE_SHIPPING_INFO
+    ADD_TO_CART,
+  REMOVE_CART_ITEM,
+  SAVE_SHIPPING_INFO,
 } from "../constants/cartConstants";
 import axios from "axios";
 
@@ -18,7 +20,7 @@ export const addItemsToCart = (id, quantity) => async (dispatch, getState) => {
             quantity,
         },
     });
-    // after reloading the page, the cart items will be stored in local storage
+    
     localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 };
 

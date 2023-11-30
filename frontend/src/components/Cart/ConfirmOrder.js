@@ -33,7 +33,7 @@ const ConfirmOrder = ({ history }) => {
     // sessionStorage - if you close the tab then data will be lost
     sessionStorage.setItem("orderInfo", JSON.stringify(data));
 
-    history.push("/payment/process");
+    history.push("/process/payment");
   };
 
   return (
