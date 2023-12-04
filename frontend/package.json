@@ -35,7 +35,6 @@
     "webfontloader": "^1.6.28"
   },
   "scripts": {
-    "install": "npm install --legacy-peer-deps",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -59,8 +58,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"https://ecommerce-backend-6pqj.onrender.com:4045",
-  "config": {
-    "legacy-peer-deps": true
-  }
+  "proxy":"https://ecommerce-backend-6pqj.onrender.com:4045"
 }
