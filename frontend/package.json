@@ -58,5 +58,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"http://192.168.29.169:4045"
+  "proxy":"https://ecommerce-backend-6pqj.onrender.com:4045"
 }
