@@ -58,5 +58,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"https://ecommerce-backend-6pqj.onrender.com:4045"
+  "proxy":"https://ecommerce-backend-6pqj.onrender.com:4045",
+  "config": {
+    "legacy-peer-deps": true
+  }
 }
