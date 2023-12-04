@@ -1,17 +1,17 @@
 import express from 'express';
-import { isAuthenicatedUser, authorizeRoles } from '../middlewares/auth.js';
+import { isAuthenticatedUser, authorizeRoles } from '../middlewares/auth.js';
 
 import { newOrder, getSingleOrder, myOrders, getAllOrders, updateOrder, deleteOrder } from '../controllers/orderController.js';
 
 const router = express.Router();
 
-router.route('/order/new').post(isAuthenicatedUser, newOrder);
-router.route('/order/:id').get(isAuthenicatedUser, getSingleOrder);
-router.route('/orders/me').get(isAuthenicatedUser, myOrders);
+router.route('/order/new').post(isAuthenticatedUser, newOrder);
+router.route('/order/:id').get(isAuthenticatedUser, getSingleOrder);
+router.route('/orders/me').get(isAuthenticatedUser, myOrders);
 
-router.route('/admin/orders').get(isAuthenicatedUser, authorizeRoles('admin'), getAllOrders);
+router.route('/admin/orders').get(isAuthenticatedUser, authorizeRoles('admin'), getAllOrders);
 
-router.route('/admin/order/:id').put(isAuthenicatedUser, authorizeRoles('admin'), updateOrder).delete(isAuthenicatedUser, authorizeRoles('admin'), deleteOrder);
+router.route('/admin/order/:id').put(isAuthenticatedUser, authorizeRoles('admin'), updateOrder).delete(isAuthenticatedUser, authorizeRoles('admin'), deleteOrder);
 
 export default router;
 

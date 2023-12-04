@@ -2,8 +2,10 @@ import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
-  const { loading, isAuthenicatedUser } = useSelector((state) => state.user);
+const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
+  const { loading, isAuthenicatedUser, user } = useSelector(
+    (state) => state.user
+  );
 
   return (
     <Fragment>
@@ -14,6 +16,11 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
             if (isAuthenicatedUser === false) {
               return <Redirect to="/login" />;
             }
+
+            if (isAdmin === true && user.role !== "admin") {
+              return <Redirect to="/login" />;
+            }
+
             return <Component {...props} />;
           }}
         />

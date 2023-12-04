@@ -3,9 +3,9 @@
     scroll-behavior: smooth;
   }
   
-  body {
-    cursor: url("./Images/cursor.png"), auto;
-  }
+  /* body {
+    cursor: url("https://cdn.icon-icons.com/icons2/3412/PNG/512/pointer_cursor_icon_217437.png"), auto;
+  } */
   
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,

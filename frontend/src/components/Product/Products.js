@@ -9,7 +9,6 @@ import Slider from "@material-ui/core/Slider";
 import { useAlert } from "react-alert";
 import Typography from "@material-ui/core/Typography";
 import MetaData from "../Layout/MetaData";
-import { AlertTitle } from "@material-ui/lab";
 
 const categories = [
   "Laptop",
@@ -23,7 +22,6 @@ const categories = [
 
 const Products = ({ match }) => {
   const dispatch = useDispatch();
-
   const alert = useAlert();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,7 +36,7 @@ const Products = ({ match }) => {
     error,
     productCount,
     resPerPage,
-    filteredProductCount,
+    filteredProductsCount,
   } = useSelector((state) => state.products);
 
   const keyword = match.params.keyword;
@@ -50,7 +48,7 @@ const Products = ({ match }) => {
   const priceHandler = (event, newPrice) => {
     setPrice(newPrice);
   };
-  let count = filteredProductCount;
+  let count = filteredProductsCount;
 
   useEffect(() => {
     if (error) {
@@ -71,9 +69,10 @@ const Products = ({ match }) => {
           <h2 className="productsHeading">Products</h2>
 
           <div className="products">
-            {products?.map((product) => (
-              <ProductCard key={product?._id} product={product} />
-            ))}
+            {products &&
+              products.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
           </div>
 
           <div className="filterBox">
@@ -114,6 +113,7 @@ const Products = ({ match }) => {
               />
             </fieldset>
           </div>
+          {console.log(count)}
           {resPerPage < count && (
             <div className="paginationBox">
               <Pagination
