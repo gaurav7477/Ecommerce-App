@@ -84,9 +84,9 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
     await user.save({ validateBeforeSave: false });
 
-    // backend url -> we ron on 3000 that's why we use FRONTEND_URL
-    // const resetPasswordUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`;
-    const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+    // backend url -> we run on 3000 that's why we use FRONTEND_URL
+    const resetPasswordUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`;
+    // const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
 
     const message = `Your password reset token is \n\n${resetPasswordUrl}\n\nIf you have not requested this email, then ignore it.`;
