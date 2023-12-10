@@ -14,6 +14,8 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 const app = express();
+
+
 // config path
 if (process.env.NODE_ENV !== "PRODUCTION") {
   dotenv.config({ path: "backend/config/config.env" });
@@ -24,28 +26,28 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 
-
-
 // Route Imports
-app.get("/", (req, res) => {
-    console.log("working successfully!");
-    res.send("working successfully!");
-});
+// app.get("/", (req, res) => {
+//     console.log("working successfully!");
+//     res.send("working successfully!");
+// });
 app.use("/api/v1", product);
 app.use("/api/v1", user);
 app.use("/api/v1", order);
 app.use("/api/v1", payment);
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
+// Serving Static Files
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const fullPath = path.join(__dirname, '..', 'frontend', 'build');
 
-// // Now you can use __dirname as before
-// const fullPath = path.join(__dirname, '../frontend/build');
+app.use(express.static(fullPath));
 
-// app.use(express.static(fullPath));
-
-// app.get("*", (req, res) => {
-//   res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
-// });
+// Fallback for SPA (React, Vue, etc.)
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(fullPath, "index.html"));
+});
 app.use(errorMiddleWare);
+
+
 export default app;
