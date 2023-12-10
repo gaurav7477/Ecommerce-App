@@ -10,28 +10,43 @@ import order from "./routes/orderRoute.js";
 import payment from "./routes/paymentRoute.js";
 
 import errorMiddleWare from "./middlewares/error.js";
-
+import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 const app = express();
+
+
+// config path
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  dotenv.config({ path: "backend/config/config.env" });
+}
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 
-// config path
-dotenv.config({ path: "./backend/config/config.env" });
-
 // Route Imports
-app.get("/", (req, res) => {
-    console.log("working successfully!");
-    res.send("working successfully!");
-});
+// app.get("/", (req, res) => {
+//     console.log("working successfully!");
+//     res.send("working successfully!");
+// });
 app.use("/api/v1", product);
 app.use("/api/v1", user);
 app.use("/api/v1", order);
 app.use("/api/v1", payment);
 
-// middlewares for errors
+// Serving Static Files
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const fullPath = path.join(__dirname, '..', 'frontend', 'build');
+
+app.use(express.static(fullPath));
+
+// Fallback for SPA (React, Vue, etc.)
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(fullPath, "index.html"));
+});
 app.use(errorMiddleWare);
 
 
