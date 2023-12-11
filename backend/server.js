@@ -2,6 +2,9 @@ import app from './app.js';
 import dotenv from 'dotenv';
 import connectDatabase from '../backend/config/database.js';
 import cloudinary from 'cloudinary';
+import { EventEmitter } from 'events';
+const emitter = new EventEmitter()
+emitter.setMaxListeners(0)
 
 // uncaught exception
 process.on('uncaughtException', err => {
