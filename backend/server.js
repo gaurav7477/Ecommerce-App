@@ -3,8 +3,16 @@ import dotenv from 'dotenv';
 import connectDatabase from '../backend/config/database.js';
 import cloudinary from 'cloudinary';
 import { EventEmitter } from 'events';
+import tls from 'tls';
+
 const emitter = new EventEmitter()
-emitter.setMaxListeners(100)
+emitter.setMaxListeners(0)
+
+const tlsSocket = new tls.TLSSocket();
+
+// Set the maximum number of listeners for this TLS socket
+tlsSocket.setMaxListeners(0); // Set the number according to your needs
+
 
 // uncaught exception
 process.on('uncaughtException', err => {
