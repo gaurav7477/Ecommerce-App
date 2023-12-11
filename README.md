@@ -1,5 +1,4 @@
-# MERN E-COMMERCE TUTORIAL
-
+# MERN E-COMMERCE WEBSITE
 Hi! My name is **Gaurav Bairagi**, I have created this website to teach MERN Stack.
 
 # Install Dependencies
