@@ -1,5 +1,7 @@
 # MERN E-COMMERCE WEBSITE
 Hi! My name is **Gaurav Bairagi**, I have created this website to teach MERN Stack.
+**Website Link**
+https://ecommerce-backend-6pqj.onrender.com/
 
 # Install Dependencies
 
@@ -27,5 +29,3 @@ SMPT_PORT=
 CLOUDINARY_NAME
 CLOUDINARY_API_KEY
 CLOUDINARY_API_SECRET
-**Website Link**
-https://ecommerce-backend-6pqj.onrender.com/
