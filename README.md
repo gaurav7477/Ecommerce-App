@@ -1,6 +1,6 @@
 # MERN E-COMMERCE WEBSITE
-Hi! My name is **Gaurav Bairagi**, I have created this website to teach MERN Stack.
-**Website Link**
+Hi! My name is **Gaurav Bairagi**, I have created this website to learn MERN Stack.
+# **Website Link**
 https://ecommerce-backend-6pqj.onrender.com/
 
 # Install Dependencies
