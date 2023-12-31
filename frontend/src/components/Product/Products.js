@@ -113,7 +113,6 @@ const Products = ({ match }) => {
               />
             </fieldset>
           </div>
-          {console.log(count)}
           {resPerPage < count && (
             <div className="paginationBox">
               <Pagination

@@ -14,6 +14,7 @@ export const cartReducer = (
 
             const isItemExist = state.cartItems.find(
                 (i) => i.product === item.product
+
             );
 
             if (isItemExist) {

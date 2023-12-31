@@ -1,6 +1,7 @@
 import ErrorHandler from "../utils/ErrorHandler.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncError.js";
 import User from "../models/userModel.js";
+import { Product } from "../models/productModel.js";
 import sendToken from "../utils/jwtToken.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
@@ -145,11 +146,39 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
 
 //get user profile Details => /api/v1/me
 export const getUserProfile = catchAsyncErrors(async (req, res, next) => {
-    const user = await User.findById(req.user.id);
-    // console.log(user);
+
+    // const user = await User.findById(req.user.id);
+    // populate with name price image Stock and first image of images array
+    const user = await User.findById(req.user.id).populate({
+        path: "cartItems.product",
+        model: Product,
+        select: "name price image Stock images",
+    });
+
+    const modifiedCart = user.cartItems.map((cartItem) => {
+        const modifiedProduct = { ...cartItem.product._doc };
+        modifiedProduct.images = [modifiedProduct.images[0]];
+        console.log(modifiedProduct);
+        return {
+          product: {Stock: modifiedProduct.Stock,
+            _id: modifiedProduct._id,
+            name: modifiedProduct.name,
+            price: modifiedProduct.price,
+            image: modifiedProduct.images[0]?.url,
+        },
+          quantity: cartItem.quantity,
+        };
+      });
+
+      const responseUser = {
+        ...user._doc,
+        cartItems: modifiedCart,
+      };
+    
     res.status(200).json({
         success: true,
-        user,
+        // user,
+        user:responseUser
     })
 });
 

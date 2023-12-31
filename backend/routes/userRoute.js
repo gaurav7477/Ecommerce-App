@@ -1,5 +1,6 @@
 import express from 'express';
 import { registerUser, loginUser, logoutUser, forgotPassword, resetPassword, getUserProfile, updatePassword, updateProfile, getAllUsers, getSingleUser, updateUserRole, deleteUser } from '../controllers/userController.js';
+import {addItemToCart,deleteItemToCart} from "../controllers/cartController.js"
 const router = express.Router();
 import { authorizeRoles, isAuthenticatedUser } from '../middlewares/auth.js';
 
@@ -19,6 +20,8 @@ router
     .put(isAuthenticatedUser, authorizeRoles("admin"), updateUserRole)
     .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteUser);
 
+router.route("/cart/add").put(isAuthenticatedUser,addItemToCart);
+router.route("/cart/delete").put(isAuthenticatedUser,deleteItemToCart);
 
 
 export default router;
