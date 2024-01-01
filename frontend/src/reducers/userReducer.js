@@ -1,3 +1,4 @@
+import { loadCart } from "../actions/cartAction";
 import {
   LOGIN_REQUEST,
   LOGIN_FAIL,
@@ -40,6 +41,7 @@ import {
   USER_DETAILS_FAIL,
   CLEAR_ERRORS,
 } from "../constants/userConstants";
+import store from "../store";
 
 export const userReducer = (state = { user: {} }, action) => {
   switch (action.type) {
@@ -53,6 +55,7 @@ export const userReducer = (state = { user: {} }, action) => {
     case LOGIN_SUCCESS:
     case REGISTER_USER_SUCCESS:
     case LOAD_USER_SUCCESS:
+      store.dispatch(loadCart);
       return {
         ...state,
         loading: false,

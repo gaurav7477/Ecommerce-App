@@ -1,16 +1,20 @@
 import User from "../models/userModel.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncError.js";
+import { Product } from "../models/productModel.js";
 // add items in cart
 
 export const addItemToCart = catchAsyncErrors(async (req, res, next) => {
   const { productId, quantity } = req.body;
+  // console.log("adding ", productId, quantity, "to cart")
   let newCart;
   const itemToAdd = {
     product: productId,
     quantity,
   };
   const user = await User.findById(req.user.id);
-  const cartItemPresent = user.cartItems.find((r) => r.product == itemToAdd.product);
+  const cartItemPresent = user.cartItems.find(
+    (r) => r.product == itemToAdd.product
+  );
 
   if (cartItemPresent) {
     newCart = user.cartItems?.map((i) => {
@@ -32,23 +36,41 @@ export const addItemToCart = catchAsyncErrors(async (req, res, next) => {
       new: true,
       runValidators: true,
     }
-  );
+  ).populate({
+    path: "cartItems.product",
+    model: Product,
+    select: "name price image Stock images",
+  });
+
+  const modifiedCart = updatedUser.cartItems.map((cartItem) => {
+    const modifiedProduct = { ...cartItem.product._doc };
+    modifiedProduct.images = [modifiedProduct.images[0]];
+    // console.log(modifiedProduct);
+    return {
+      product: {
+        Stock: modifiedProduct.Stock,
+        _id: modifiedProduct._id,
+        name: modifiedProduct.name,
+        price: modifiedProduct.price,
+        image: modifiedProduct.images[0]?.url,
+      },
+      quantity: cartItem.quantity,
+    };
+  });
 
   res.status(200).json({
     success: true,
-    noOfItems: updatedUser?.cartItems.length,
-    items: updatedUser?.cartItems,
+    items: modifiedCart,
   });
 });
-
-
 
 export const deleteItemToCart = catchAsyncErrors(async (req, res, next) => {
   const { productId } = req.body;
   const user = await User.findById(req.user.id);
 
   const newCart = user.cartItems?.filter((i) => {
-    return i.product != productId})
+    return i.product != productId;
+  });
 
   const updatedUser = await User.findByIdAndUpdate(
     user._id,
@@ -64,4 +86,4 @@ export const deleteItemToCart = catchAsyncErrors(async (req, res, next) => {
     noOfItems: updatedUser?.cartItems.length,
     items: updatedUser?.cartItems,
   });
-})
+});

@@ -42,6 +42,7 @@ import ProductReviews from "./components/Admin/ProductReviews.js";
 import Contact from "./components/Layout/Contact/Contact.js";
 import About from "./components/Layout/About/About.js";
 import NotFound from "./components/Layout/Not Found/NotFound.js";
+import { loadCart } from "./actions/cartAction.js";
 
 function App() {
   const { isAuthenicatedUser, user } = useSelector((state) => state.user);
@@ -60,8 +61,9 @@ function App() {
         families: ["Roboto", "Droid Sans", "Chilanka"],
       },
     });
-    // for storing user data in local storage while refreshing the page
+    // for storing user data and cart in local storage while refreshing the page
     store.dispatch(loadUser());
+    store.dispatch(loadCart());
     // for stripe payment
     getStripeApiKey();
   }, []);
@@ -106,7 +108,7 @@ function App() {
 
         <Route exact path="/login" component={LoginSignUp} />
 
-        <Route exact path="/cart" component={Cart} />
+        <ProtectedRoute exact path="/cart" component={Cart} />
 
         <ProtectedRoute exact path="/shipping" component={Shipping} />
 

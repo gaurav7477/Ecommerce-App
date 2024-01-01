@@ -11,20 +11,21 @@ const Cart = ({ history }) => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
 
-  const increaseQuantity = (id, quantity, stock) => {
-    const newQty = quantity + 1;
+  const increaseQuantity = (_id, quantity, stock) => {
+
+    const newQty = 1;
     if (stock <= quantity) {
       return;
     }
-    dispatch(addItemsToCart(id, newQty));
+    dispatch(addItemsToCart(_id, newQty));
   };
 
-  const decreaseQuantity = (id, quantity) => {
-    const newQty = quantity - 1;
+  const decreaseQuantity = (_id, quantity) => {
+    const newQty = -1;
     if (1 >= quantity) {
       return;
     }
-    dispatch(addItemsToCart(id, newQty));
+    dispatch(addItemsToCart(_id, newQty));
   };
 
   const deleteCartItems = (id) => {
@@ -37,7 +38,7 @@ const Cart = ({ history }) => {
 
   return (
     <Fragment>
-      {cartItems.length === 0 ? (
+      {cartItems?.length === 0 ? (
         <div className="emptyCart">
           <RemoveShoppingCartIcon />
 
@@ -52,41 +53,43 @@ const Cart = ({ history }) => {
               <p>Quantity</p>
               <p>Subtotal</p>
             </div>
-
+          {/* {cartItems && console.log('Item', cartItems[0])} */}
             {cartItems?.map((item) => (
-              <div className="cartContainer" key={item.product}>
+            
+              <div className="cartContainer" key={item.product._id}>
                 <CartItemCard item={item} deleteCartItems={deleteCartItems} />
                 <div className="cartInput">
                   <button
                     onClick={() =>
-                      decreaseQuantity(item.product, item.quantity)
+                      decreaseQuantity(item.product._id, item.quantity)
                     }
                   >
                     -
                   </button>
+                  {/* {console.log("item",item)} */}
                   <input type="number" value={item.quantity} readOnly />
                   <button
                     onClick={() =>
                       increaseQuantity(
-                        item.product,
+                        item.product._id,
                         item.quantity,
-                        item.stock
+                        item.product.Stock
                       )
                     }
                   >
                     +
                   </button>
                 </div>
-                <p className="cartSubtotal">{`₹${item.price * item.quantity}`}</p>
+                <p className="cartSubtotal">{`₹${item.product.price * item.quantity}`}</p>
               </div>
             ))}
-
+          
             <div className="cartGrossProfit">
               <div></div>
               <div className="cartGrossProfitBox">
                 <p>Gross Total</p>
-                <p>{`₹${cartItems.reduce(
-                  (acc, item) => acc + item.quantity * item.price,
+                <p>{`₹${cartItems?.reduce(
+                  (acc, item) => acc + item.quantity * item.product.price,
                   0
                 )}`}</p>
               </div>

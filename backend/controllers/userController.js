@@ -158,7 +158,7 @@ export const getUserProfile = catchAsyncErrors(async (req, res, next) => {
     const modifiedCart = user.cartItems.map((cartItem) => {
         const modifiedProduct = { ...cartItem.product._doc };
         modifiedProduct.images = [modifiedProduct.images[0]];
-        console.log(modifiedProduct);
+        // console.log(modifiedProduct);
         return {
           product: {Stock: modifiedProduct.Stock,
             _id: modifiedProduct._id,
