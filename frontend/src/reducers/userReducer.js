@@ -55,7 +55,7 @@ export const userReducer = (state = { user: {} }, action) => {
     case LOGIN_SUCCESS:
     case REGISTER_USER_SUCCESS:
     case LOAD_USER_SUCCESS:
-      store.dispatch(loadCart);
+      store.dispatch(loadCart());
       return {
         ...state,
         loading: false,

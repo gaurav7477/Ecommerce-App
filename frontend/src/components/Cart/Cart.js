@@ -29,6 +29,7 @@ const Cart = ({ history }) => {
   };
 
   const deleteCartItems = (id) => {
+    console.log('deleting id', id)
     dispatch(removeItemsFromCart(id));
   };
 
@@ -78,7 +79,7 @@ const Cart = ({ history }) => {
                   >
                     +
                   </button>
-                  <p>`only ${item.product.Stock} stock is left `</p>
+                  {/* <p>`only ${item.product.Stock} stock is left `</p> */}
                 </div>
                 <p className="cartSubtotal">{`₹${item.product.price * item.quantity}`}</p>
               </div>

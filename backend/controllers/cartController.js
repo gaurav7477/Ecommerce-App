@@ -66,6 +66,7 @@ export const addItemToCart = catchAsyncErrors(async (req, res, next) => {
 
 export const deleteItemToCart = catchAsyncErrors(async (req, res, next) => {
   const { productId } = req.body;
+  console.log("deleting ", productId, " from cart");
   const user = await User.findById(req.user.id);
 
   const newCart = user.cartItems?.filter((i) => {
@@ -79,11 +80,30 @@ export const deleteItemToCart = catchAsyncErrors(async (req, res, next) => {
       new: true,
       runValidators: true,
     }
-  );
+  ).populate({
+    path: "cartItems.product",
+    model: Product,
+    select: "name price image Stock images",
+  });
 
+  const modifiedCart = updatedUser.cartItems.map((cartItem) => {
+    const modifiedProduct = { ...cartItem.product._doc };
+    modifiedProduct.images = [modifiedProduct.images[0]];
+    // console.log(modifiedProduct);
+    return {
+      product: {
+        Stock: modifiedProduct.Stock,
+        _id: modifiedProduct._id,
+        name: modifiedProduct.name,
+        price: modifiedProduct.price,
+        image: modifiedProduct.images[0]?.url,
+      },
+      quantity: cartItem.quantity,
+    };
+  });
+  // console.log(modifiedCart);
   res.status(200).json({
     success: true,
-    noOfItems: updatedUser?.cartItems.length,
-    items: updatedUser?.cartItems,
+    items: modifiedCart,
   });
 });

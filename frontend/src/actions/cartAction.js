@@ -57,20 +57,21 @@ export const addItemsToCart = (id, quantity) => async (dispatch, getState) => {
 export const removeItemsFromCart = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: DELETE_CART_REQUEST });
+    console.log('id', id)
 
     const config = {
       headers: { "Content-Type": "application/json" },
     };
 
     const { data } = await axios.put(
-      `/api/v1/cart/add`,
+      `/api/v1/cart/delete`,
       { productId: id },
       config
     );
 
     dispatch({
       type: DELETE_CART_SUCCESS,
-      payload: data.success,
+      payload: data,
     });
   } catch (error) {
     dispatch({
