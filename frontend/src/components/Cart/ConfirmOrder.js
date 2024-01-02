@@ -11,7 +11,7 @@ const ConfirmOrder = ({ history }) => {
   const { user } = useSelector((state) => state.user);
 
   const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.quantity * item.price,
+    (acc, item) => acc + item.quantity * item.product.price,
     0
   );
 
@@ -64,14 +64,14 @@ const ConfirmOrder = ({ history }) => {
             <div className="confirmCartItemsContainer">
               {cartItems &&
                 cartItems.map((item) => (
-                  <div key={item.product}>
-                    <img src={item.image} alt="Product" />
-                    <Link to={`/product/${item.product}`}>
-                      {item.name}
+                  <div key={item.product._id}>
+                    <img src={item.product.image} alt="Product" />
+                    <Link to={`/product/${item.product._id}`}>
+                      {item.product.name}
                     </Link>{" "}
                     <span>
-                      {item.quantity} X ₹{item.price} ={" "}
-                      <b>₹{item.price * item.quantity}</b>
+                      {item.quantity} X ₹{item.product.price} ={" "}
+                      <b>₹{item.product.price * item.quantity}</b>
                     </span>
                   </div>
                 ))}

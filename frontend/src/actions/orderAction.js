@@ -26,7 +26,7 @@ import axios from "axios";
 export const createOrder = (order) => async (dispatch) => {
   try {
     dispatch({ type: CREATE_ORDER_REQUEST });
-
+    console.log("order", order)
     const config = {
       headers: {
         "Content-Type": "application/json",

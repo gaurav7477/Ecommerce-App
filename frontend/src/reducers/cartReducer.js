@@ -18,6 +18,7 @@ export const cartReducer = (
   switch (action.type) {
     case LOAD_CART_REQUEST:
       return {
+        ...state,
         loading: true,
       };
     case LOAD_CART_SUCCESS:
@@ -28,6 +29,7 @@ export const cartReducer = (
       };
     case LOAD_CART_FAIL:
       return {
+        ...state,
         loading: false,
         cartItems: null,
         error: action.payload,

@@ -65,8 +65,7 @@ const Cart = ({ history }) => {
                     }
                   >
                     -
-                  </button>
-                  {/* {console.log("item",item)} */}
+                    </button>
                   <input type="number" value={item.quantity} readOnly />
                   <button
                     onClick={() =>
@@ -79,6 +78,7 @@ const Cart = ({ history }) => {
                   >
                     +
                   </button>
+                  <p>`only ${item.product.Stock} stock is left `</p>
                 </div>
                 <p className="cartSubtotal">{`₹${item.product.price * item.quantity}`}</p>
               </div>

@@ -15,10 +15,19 @@ export const newOrder = catchAsyncErrors(async (req, res, next) => {
         shippingPrice,
         totalPrice,
     } = req.body;
-
+    const newOrderItems = orderItems.map((item)=>{
+        return {
+        name: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity,
+        image: item.product.image,
+        product: item.product._id,
+    }
+});
+// console.log(newOrderItems);
     const order = await Order.create({
         shippingInfo,
-        orderItems,
+        orderItems:newOrderItems,
         paymentInfo,
         itemsPrice,
         taxPrice,
